@@ -44,7 +44,7 @@ rust-version = "1.95"
 frankensearch-core = { version = "0.4.0", path = "crates/frankensearch-core" }
 frankensearch-embed = { version = "0.4.0", path = "crates/frankensearch-embed", default-features = false }
 frankensearch-index = { version = "0.4.0", path = "crates/frankensearch-index" }
-frankensearch-lexical = { version = "0.4.0", path = "crates/frankensearch-lexical" }
+frankensearch-lexical = { version = "0.4.1", path = "crates/frankensearch-lexical" }
 frankensearch-fusion = { version = "0.4.0", path = "crates/frankensearch-fusion" }
 frankensearch-rerank = { version = "0.5.0", path = "crates/frankensearch-rerank" }
 frankensearch-storage = { version = "0.4.0", path = "crates/frankensearch-storage" }
@@ -129,15 +129,10 @@ ft-api = { package = "frankentorch-api", version = "0.1.0" }
 ft-autograd = { package = "frankentorch-autograd", version = "0.1.0" }
 ft-core = { package = "frankentorch-core", version = "0.1.0" }
 
-# Full-text search
-# Registry 0.26.1 pins lru ^0.16.3, which RUSTSEC-2026-0253 marks unsound
-# (patched only in lru >= 0.18.2, unreachable from ^0.16.3). The advisory is
-# informational: the use-after-free needs `catch_unwind` around a panicking
-# `Drop` on a cache KEY type, and tantivy's lru caches are keyed by integers
-# and other trivially-droppable types, so the pattern cannot occur in this
-# graph. A registry pin is required for crates.io publication (a git dep is
-# unpublishable); move to tantivy 0.27 when it ships with patched lru.
-tantivy = "=0.26.2"
+# Full-text search. Tantivy 0.27 resolves lru >= 0.18.2, which carries the
+# RUSTSEC-2026-0253 panic-safety fix. Keep the exact registry pin: a git
+# dependency is unpublishable for the crates.io owner.
+tantivy = "=0.27.0"
 
 ndarray = "0.17"
 
